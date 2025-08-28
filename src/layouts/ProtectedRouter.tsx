@@ -1,9 +1,10 @@
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth()
-  return user ? children : <Navigate to="/login" />
+  console.log(user)
+  return user ? children : <Navigate to="/" />
 }
 
 export default ProtectedRoute

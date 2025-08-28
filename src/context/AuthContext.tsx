@@ -1,21 +1,48 @@
 import type { User } from '@/types/types'
-import { createContext, useContext, useState } from 'react'
-
-interface AuthContextType {
-  user: User | null
-  login: (user: User) => void
-  logout: () => void
-  register: (user: User) => void
-}
-
-const AuthContext = createContext<AuthContextType | null>(null)
+import { useState, useEffect } from 'react'
+import { AuthContext } from './AuthContext'
+import { authService } from '@/services/authService'
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const login = (user: User) => setUser(user)
-  const logout = () => setUser(null)
-  const register = (user: User) => setUser(user) // Simula registro e inicio de sesión
+  // Verificar si hay un usuario autenticado al cargar la app
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const currentUser = await authService.getCurrentUser()
+        setUser(currentUser)
+      } catch (error) {
+        console.error('Error al verificar autenticación:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkAuth()
+  }, [])
+
+  const login = async (username: string, password: string) => {
+    const { user } = await authService.login({ username, password })
+    setUser(user)
+    return user
+  }
+
+  const logout = async () => {
+    await authService.logout()
+    setUser(null)
+  }
+
+  const register = async (username: string, email: string, password: string) => {
+    const { user } = await authService.register({ username, email, password })
+    setUser(user)
+    return user
+  }
+
+  if (loading) {
+    return <div>Cargando...</div> // O un componente de loading
+  }
 
   return (
     <AuthContext.Provider value={{ user, login, logout, register }}>
@@ -23,9 +50,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   )
 }
-
-export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (!context) throw new Error('useAuth must be used within an AuthProvider')
-  return context
-}
+export { AuthContext }

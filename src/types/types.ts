@@ -1,16 +1,16 @@
 export interface User {
   id: number
-  name: string
+  username: string
   email: string
 }
 
 export interface LoginRequest {
-  email: string
+  username: string
   password: string
 }
 
 export interface RegisterRequest {
-  name: string
+  username: string
   email: string
   password: string
   confirmPassword: string

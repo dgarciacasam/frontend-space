@@ -27,8 +27,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function Dashboard() {
+  const { user } = useAuth()
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const [currentTime, setCurrentTime] = useState('02:34:15')
   const [currentTask, setCurrentTask] = useState('Diseño de interfaz')
@@ -98,7 +100,7 @@ export default function Dashboard() {
                     <AvatarImage src="/placeholder.svg?height=32&width=32" />
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-medium">Juan Pérez</span>
+                  <span className="text-sm font-medium">{user?.username}</span>
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>

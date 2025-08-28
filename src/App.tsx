@@ -1,7 +1,7 @@
 import './App.css'
 import { Login } from './components/Login'
 import { Register } from './components/Register'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider } from './context/AuthContext.tsx'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './layouts/ProtectedRouter'
 //import { Home } from './components/Home'
@@ -19,7 +19,6 @@ export const App = () => {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  {/*<Home />*/}
                   <Dashboard />
                 </ProtectedRoute>
               }
